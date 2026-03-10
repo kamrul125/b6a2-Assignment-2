@@ -13,40 +13,42 @@ enum Role {
 }
 
 model User {
-  id        Int      @id @default(autoincrement())
+  id        Int       @id @default(autoincrement())
   name      String
-  email     String   @unique
+  email     String    @unique
   password  String
   phone     String?
   address   String?
-  role      Role     @default(USER)
-  rentals   Rental[]
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  role      Role      @default(USER)
+  // রিলেশন নাম আপডেট করা হয়েছে
+  bookings  Booking[] 
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 }
 
 model Bike {
-  id           Int      @id @default(autoincrement())
+  id           Int       @id @default(autoincrement())
   name         String
   description  String
-  pricePerHour Int
-  isAvailable  Boolean  @default(true)
+  pricePerHour Float    
+  isAvailable  Boolean   @default(true)
   brand        String
   model        String
   cc           Int
-  rentals      Rental[]
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  // রিলেশন নাম আপডেট করা হয়েছে
+  bookings  Booking[]
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
 }
 
-model Rental {
+// Rental এর বদলে এখন Booking
+model Booking {
   id         Int       @id @default(autoincrement())
   userId     Int
   bikeId     Int
   startTime  DateTime  @default(now())
   returnTime DateTime?
-  // Int এর বদলে Float দিলে পয়সার হিসাবও রাখা যাবে
-  totalCost  Float     @default(0) 
+  totalCost  Float     @default(0)
   isReturned Boolean   @default(false)
 
   user User @relation(fields: [userId], references: [id])
@@ -55,7 +57,8 @@ model Rental {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  // এটি অপশনাল, তবে সার্চিং ফাস্ট করে
   @@index([userId])
   @@index([bikeId])
+  // ডাটাবেজে টেবিলের নাম bookings দেখাবে
+  @@map("bookings") 
 }

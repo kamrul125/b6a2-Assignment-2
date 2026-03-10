@@ -4,7 +4,10 @@ import { authMiddleware } from '../../middlewares/auth';
 
 const router = express.Router();
 
-// শুধু অ্যাডমিন বা অথরাইজড ইউজার এই এন্ডপয়েন্ট কল করতে পারবে
+// বুকিং তৈরি (POST) - এটি না থাকলে 'Cannot POST' দেখাবে
+router.post('/', authMiddleware, bookingController.createBooking);
+
+// বাইক রিটার্ন (PUT)
 router.put('/return/:id', authMiddleware, bookingController.returnVehicle);
 
 export default router;

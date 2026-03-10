@@ -1,6 +1,7 @@
 import prisma from "../../config/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import config from "../../config";
 
 // ১. রেজিস্টার ফাংশন
 const register = async (data: any) => {
@@ -18,7 +19,19 @@ const login = async (data: any) => {
   const isPasswordMatch = await bcrypt.compare(data.password, user.password);
   if (!isPasswordMatch) throw new Error("Invalid password");
 
-  const token = jwt.sign({ id: user.id, role: user.role }, "your_secret_key", { expiresIn: '1d' });
+  // টোকেন পেলোড
+  const jwtPayload = { id: user.id, role: user.role };
+
+  // টোকেন তৈরির সময় চাবি এবং এক্সপায়ারি টাইম সেট করা
+  // expiresIn: (config.jwt_access_expires_in as any) ব্যবহারের ফলে টাইপ এররটি চলে যাবে
+  const token = jwt.sign(
+    jwtPayload,
+    config.jwt_access_secret as string,
+    { 
+      expiresIn: (config.jwt_access_expires_in as any) || '7d' 
+    }
+  );
+
   return { token, user };
 };
 
@@ -30,14 +43,14 @@ const getProfileFromDB = async (id: number) => {
   });
 };
 
-// ৪. সকল ইউজার গেট করার ফাংশন (এটি আগে মিসিং ছিল)
+// ৪. সকল ইউজার গেট করার ফাংশন
 const getAllUsers = async () => {
   return await prisma.user.findMany({
     select: { id: true, name: true, email: true, role: true, createdAt: true }
   });
 };
 
-// ৫. প্রোফাইল আপডেট করার ফাংশন (এটিও আগে মিসিং ছিল)
+// ৫. প্রোফাইল আপডেট করার ফাংশন
 const updateProfile = async (id: number, data: any) => {
   return await prisma.user.update({
     where: { id },
@@ -45,11 +58,10 @@ const updateProfile = async (id: number, data: any) => {
   });
 };
 
-// সবচেয়ে গুরুত্বপূর্ণ: এখানে নতুন ফাংশনগুলো যোগ করা হলো
 export const authService = {
   register,
   login,
   getProfileFromDB,
-  getAllUsers,    // এটি এখন কন্ট্রোলারের এরর দূর করবে
-  updateProfile,  // এটিও এখন কন্ট্রোলারের এরর দূর করবে
+  getAllUsers,
+  updateProfile,
 };

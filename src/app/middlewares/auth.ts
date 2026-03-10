@@ -1,14 +1,13 @@
 import { NextFunction, Request, Response } from 'express';
 import jwt, { JwtPayload } from 'jsonwebtoken';
 import catchAsync from '../utils/catchAsync';
+import config from '../config'; // config ফাইলটি ইমপোর্ট করুন
 
-const JWT_SECRET = process.env.JWT_SECRET || "secret";
-
-// Express এর Request ইন্টারফেসটি এক্সটেন্ড করা যাতে .user পাওয়া যায়
+// Express এর Request ইন্টারফেসটি এক্সটেন্ড করা
 declare global {
   namespace Express {
     interface Request {
-      user?: JwtPayload | string;
+      user?: JwtPayload;
     }
   }
 }
@@ -16,7 +15,7 @@ declare global {
 export const authMiddleware = catchAsync(async (req: Request, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 
-  // ১. টোকেন চেক করা
+  // ১. টোকেন আছে কি না চেক করা
   if (!authHeader || !authHeader.startsWith('Bearer ')) {
     return res.status(401).json({
       success: false,
@@ -28,7 +27,11 @@ export const authMiddleware = catchAsync(async (req: Request, res: Response, nex
 
   // ২. টোকেন ভেরিফাই করা
   try {
-    const decoded = jwt.verify(token, JWT_SECRET) as JwtPayload;
+    // এখানে config.jwt_access_secret ব্যবহার করুন যা আপনার .env এর সাথে মিলবে
+    const decoded = jwt.verify(
+      token, 
+      config.jwt_access_secret as string
+    ) as JwtPayload;
 
     // ৩. ডিকোড করা ডাটা রিকোয়েস্টে রাখা
     req.user = decoded; 
