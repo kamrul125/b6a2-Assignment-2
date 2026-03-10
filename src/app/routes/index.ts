@@ -1,18 +1,16 @@
 import { Router } from 'express';
-import UserRoutes from '../modules/user/user.route'; // { } সরিয়ে ফেলা হয়েছে
-import AuthRoutes from '../modules/auth/auth.route'; // { } সরিয়ে ফেলা হয়েছে
+import UserRoutes from '../modules/user/user.route';
+import AuthRoutes from '../modules/auth/auth.route';
+import VehicleRoutes from '../modules/vehicle/vehicle.route'; 
+import BookingRoutes from '../modules/booking/booking.route'; 
 
 const router = Router();
 
 const moduleRoutes = [
-  {
-    path: '/users',
-    route: UserRoutes,
-  },
-  {
-    path: '/auth',
-    route: AuthRoutes,
-  },
+  { path: '/auth', route: AuthRoutes },
+  { path: '/vehicles', route: VehicleRoutes }, 
+  { path: '/bookings', route: BookingRoutes }, 
+  { path: '/users', route: UserRoutes },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));

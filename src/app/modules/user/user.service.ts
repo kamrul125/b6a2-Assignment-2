@@ -18,11 +18,12 @@ export const userService = {
   },
 
   updateUser: async (id: number, data: any, currentUser: any) => {
-    // Admin can update anyone, user can update self
+    // ১. Authorization Check: এডমিন সবাইরে পারে, ইউজার শুধু নিজেকে পারে
     if (currentUser.role !== "ADMIN" && currentUser.id !== id) {
-      throw new Error("Unauthorized");
+      throw new Error("You are not authorized to update this profile!");
     }
 
+    // ২. পাসওয়ার্ড আপডেট করলে সেটা হ্যাশ করা
     if (data.password) {
       data.password = await bcrypt.hash(data.password, 10);
     }
@@ -37,9 +38,15 @@ export const userService = {
   },
 
   deleteUser: async (id: number, currentUser: any) => {
+    // ৩. ডিলিট করার পারমিশন চেক (শুধু এডমিন)
     if (currentUser.role !== "ADMIN") {
       throw new Error("Only admin can delete users");
     }
+    
+    // চেক করা যে ইউজার আসলে আছে কি না
+    const isExist = await prisma.user.findUnique({ where: { id } });
+    if (!isExist) throw new Error("User not found to delete!");
+
     await prisma.user.delete({ where: { id } });
   },
 };

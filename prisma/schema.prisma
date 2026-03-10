@@ -7,17 +7,55 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+enum Role {
+  ADMIN
+  USER
+}
+
 model User {
   id        Int      @id @default(autoincrement())
   name      String
   email     String   @unique
   password  String
+  phone     String?
+  address   String?
   role      Role     @default(USER)
+  rentals   Rental[]
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 }
 
-enum Role {
-  ADMIN
-  USER
+model Bike {
+  id           Int      @id @default(autoincrement())
+  name         String
+  description  String
+  pricePerHour Int
+  isAvailable  Boolean  @default(true)
+  brand        String
+  model        String
+  cc           Int
+  rentals      Rental[]
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+}
+
+model Rental {
+  id         Int       @id @default(autoincrement())
+  userId     Int
+  bikeId     Int
+  startTime  DateTime  @default(now())
+  returnTime DateTime?
+  // Int এর বদলে Float দিলে পয়সার হিসাবও রাখা যাবে
+  totalCost  Float     @default(0) 
+  isReturned Boolean   @default(false)
+
+  user User @relation(fields: [userId], references: [id])
+  bike Bike @relation(fields: [bikeId], references: [id])
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // এটি অপশনাল, তবে সার্চিং ফাস্ট করে
+  @@index([userId])
+  @@index([bikeId])
 }

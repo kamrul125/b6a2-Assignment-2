@@ -6,25 +6,45 @@ import { sendResponse } from "../../utils/sendResponse";
 export const userController = {
   getAllUsers: catchAsync(async (req: Request, res: Response) => {
     const users = await userService.getAllUsers();
-    sendResponse(res, { success: true, message: "All users retrieved", data: users });
+    sendResponse(res, { 
+      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      success: true, 
+      message: "All users retrieved", 
+      data: users 
+    });
   }),
 
   getSingleUser: catchAsync(async (req: Request, res: Response) => {
     const user = await userService.getSingleUser(Number(req.params.id));
-    sendResponse(res, { success: true, message: "User retrieved", data: user });
+    sendResponse(res, { 
+      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      success: true, 
+      message: "User retrieved", 
+      data: user 
+    });
   }),
 
   updateUser: catchAsync(async (req: Request, res: Response) => {
     // @ts-ignore
     const currentUser = req.user;
     const updatedUser = await userService.updateUser(Number(req.params.id), req.body, currentUser);
-    sendResponse(res, { success: true, message: "User updated", data: updatedUser });
+    sendResponse(res, { 
+      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      success: true, 
+      message: "User updated", 
+      data: updatedUser 
+    });
   }),
 
   deleteUser: catchAsync(async (req: Request, res: Response) => {
     // @ts-ignore
     const currentUser = req.user;
     await userService.deleteUser(Number(req.params.id), currentUser);
-    sendResponse(res, { success: true, message: "User deleted" });
+    sendResponse(res, { 
+      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      success: true, 
+      message: "User deleted",
+      data: null // data প্রপার্টি পাঠাতে হবে কারণ ইন্টারফেসে আছে
+    });
   }),
 };

@@ -1,10 +1,10 @@
-import { PrismaClient } from "@prisma/client";
+import { PrismaClient, Role } from "@prisma/client";
 import bcrypt from "bcrypt";
 
 const prisma = new PrismaClient();
 
 async function main() {
-  console.log("Seeding started...");
+  console.log("🚀 Seeding started...");
 
   // ১. অ্যাডমিন তৈরি করার লজিক
   const adminEmail = "admin@example.com";
@@ -17,7 +17,9 @@ async function main() {
         name: "Super Admin",
         email: adminEmail,
         password: hashedAdminPassword,
-        role: "ADMIN",
+        role: Role.ADMIN, // Enum ব্যবহার করা ভালো
+        phone: "01700000000",
+        address: "Dhaka, Bangladesh",
       },
     });
     console.log("✅ Admin user created:", admin.email);
@@ -25,33 +27,61 @@ async function main() {
     console.log("ℹ️ Admin user already exists");
   }
 
-  // ২. সাধারণ ইউজারদের লিস্ট
+  // ২. সাধারণ ইউজার তৈরি করা
   const users = [
     { name: "Alice", email: "alice@example.com", password: "password123" },
     { name: "Bob", email: "bob@example.com", password: "password123" },
   ];
 
-  // ৩. লুপ চালিয়ে ইউজার তৈরি করা
   for (const u of users) {
     const exists = await prisma.user.findUnique({ where: { email: u.email } });
-    
     if (!exists) {
-      const hashedUserPassword = await bcrypt.hash(u.password, 10);
+      const hashedPassword = await bcrypt.hash(u.password, 10);
       await prisma.user.create({
         data: {
           name: u.name,
           email: u.email,
-          password: hashedUserPassword,
-          role: "USER",
+          password: hashedPassword,
+          role: Role.USER,
         },
       });
       console.log(`✅ User created: ${u.email}`);
-    } else {
-      console.log(`ℹ️ User already exists: ${u.email}`);
     }
   }
 
-  console.log("Seeding finished successfully!");
+  // ৩. কিছু বাইক (Bikes) তৈরি করার লজিক 🆕
+  // এগুলো না থাকলে আপনি বুকিং এপিআই টেস্ট করতে পারবেন না
+  const bikes = [
+    {
+      name: "Yamaha R15 V4",
+      description: "Sporty look and great performance",
+      pricePerHour: 150,
+      isAvailable: true,
+      brand: "Yamaha",
+      model: "V4",
+      cc: 155,
+    },
+    {
+      name: "Royal Enfield Classic 350",
+      description: "A legendary cruiser",
+      pricePerHour: 200,
+      isAvailable: true,
+      brand: "Royal Enfield",
+      model: "Classic 350",
+      cc: 350,
+    },
+  ];
+
+  for (const b of bikes) {
+    // বাইকের নাম দিয়ে চেক করছি অলরেডি আছে কি না
+    const bikeExists = await prisma.bike.findFirst({ where: { name: b.name } });
+    if (!bikeExists) {
+      await prisma.bike.create({ data: b });
+      console.log(`✅ Bike created: ${b.name}`);
+    }
+  }
+
+  console.log("🏁 Seeding finished successfully!");
 }
 
 main()

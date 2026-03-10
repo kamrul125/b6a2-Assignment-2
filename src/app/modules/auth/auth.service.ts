@@ -2,54 +2,54 @@ import prisma from "../../config/prisma";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 
-const JWT_SECRET = process.env.JWT_SECRET || "secret";
-
+// ১. রেজিস্টার ফাংশন
 const register = async (data: any) => {
-  // পাসওয়ার্ড হ্যাশ করা
   const hashedPassword = await bcrypt.hash(data.password, 10);
-
-  // রোলটি বড় হাতের অক্ষরে (ADMIN/USER) কনভার্ট করা
-  const userRole = data.role ? data.role.toUpperCase() : "USER";
-
-  const user = await prisma.user.create({
-    data: {
-      name: data.name,
-      email: data.email,
-      password: hashedPassword,
-      role: userRole as any, // Type safe করার জন্য
-    },
+  return await prisma.user.create({
+    data: { ...data, password: hashedPassword },
   });
-
-  return { 
-    id: user.id, 
-    name: user.name, 
-    email: user.email, 
-    role: user.role 
-  };
 };
 
+// ২. লগইন ফাংশন
 const login = async (data: any) => {
-  const user = await prisma.user.findUnique({ 
-    where: { email: data.email } 
-  });
+  const user = await prisma.user.findUnique({ where: { email: data.email } });
+  if (!user) throw new Error("User not found");
 
-  if (!user) {
-    throw new Error("Invalid credentials");
-  }
+  const isPasswordMatch = await bcrypt.compare(data.password, user.password);
+  if (!isPasswordMatch) throw new Error("Invalid password");
 
-  const isPasswordValid = await bcrypt.compare(data.password, user.password);
-  if (!isPasswordValid) {
-    throw new Error("Invalid credentials");
-  }
-
-  // টোকেনে স্পষ্টভাবে ডাটা পাঠানো হচ্ছে
-  const token = jwt.sign(
-    { id: user.id, email: user.email, role: user.role },
-    JWT_SECRET,
-    { expiresIn: "7d" }
-  );
-
-  return token;
+  const token = jwt.sign({ id: user.id, role: user.role }, "your_secret_key", { expiresIn: '1d' });
+  return { token, user };
 };
 
-export const authService = { register, login };
+// ৩. প্রোফাইল গেট করার ফাংশন
+const getProfileFromDB = async (id: number) => {
+  return await prisma.user.findUnique({
+    where: { id },
+    select: { id: true, name: true, email: true, role: true, createdAt: true }
+  });
+};
+
+// ৪. সকল ইউজার গেট করার ফাংশন (এটি আগে মিসিং ছিল)
+const getAllUsers = async () => {
+  return await prisma.user.findMany({
+    select: { id: true, name: true, email: true, role: true, createdAt: true }
+  });
+};
+
+// ৫. প্রোফাইল আপডেট করার ফাংশন (এটিও আগে মিসিং ছিল)
+const updateProfile = async (id: number, data: any) => {
+  return await prisma.user.update({
+    where: { id },
+    data,
+  });
+};
+
+// সবচেয়ে গুরুত্বপূর্ণ: এখানে নতুন ফাংশনগুলো যোগ করা হলো
+export const authService = {
+  register,
+  login,
+  getProfileFromDB,
+  getAllUsers,    // এটি এখন কন্ট্রোলারের এরর দূর করবে
+  updateProfile,  // এটিও এখন কন্ট্রোলারের এরর দূর করবে
+};

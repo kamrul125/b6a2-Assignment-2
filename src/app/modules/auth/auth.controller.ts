@@ -2,18 +2,15 @@ import { Request, Response } from "express";
 import { authService } from "./auth.service";
 import { sendResponse } from "../../utils/sendResponse";
 import catchAsync from "../../utils/catchAsync";
-import { registerSchema } from "./auth.validation"; // ভ্যালিডেশন স্কিমা ইম্পোর্ট করুন
+import { registerSchema } from "./auth.validation";
 
 export const authController = {
   register: catchAsync(async (req: Request, res: Response) => {
-    // ১. ডাটা ভ্যালিডেশন (Zod দিয়ে রিকোয়েস্ট বডি চেক করা হচ্ছে)
     const validatedData = registerSchema.parse(req.body);
-
-    // ২. সার্ভিসকে ভ্যালিডেট করা ডাটা পাঠানো হচ্ছে
     const user = await authService.register(validatedData);
 
     sendResponse(res, {
-      statusCode: 201, // সাকসেসফুলি ক্রিয়েট হলে ২০১ ব্যবহার করা ভালো
+      statusCode: 201, 
       success: true,
       message: "User registered successfully",
       data: user,
@@ -21,23 +18,47 @@ export const authController = {
   }),
 
   login: catchAsync(async (req: Request, res: Response) => {
-    const token = await authService.login(req.body);
+    const { token, user } = await authService.login(req.body);
     sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "User logged in successfully",
-      data: { token },
+      data: { token, data: user },
     });
   }),
 
   getProfile: catchAsync(async (req: Request, res: Response) => {
     // @ts-ignore
-    const user = req.user; // মিডলওয়্যার থেকে আসা ইউজার ডাটা
+    const user = req.user; 
     sendResponse(res, {
       statusCode: 200,
       success: true,
       message: "User profile retrieved successfully",
       data: user,
+    });
+  }),
+
+  // ১. সকল ইউজার দেখার জন্য (আপনার এরর মেসেজ অনুযায়ী এটি দরকার)
+  getAllUsers: catchAsync(async (req: Request, res: Response) => {
+    const users = await authService.getAllUsers();
+    sendResponse(res, {
+      statusCode: 200, // এখানে statusCode যোগ করা হয়েছে
+      success: true,
+      message: "All users retrieved",
+      data: users,
+    });
+  }),
+
+  // ২. প্রোফাইল আপডেট করার জন্য (আপনার এরর মেসেজ অনুযায়ী এটি দরকার)
+  updateProfile: catchAsync(async (req: Request, res: Response) => {
+    // @ts-ignore
+    const userId = req.user.id;
+    const updatedUser = await authService.updateProfile(userId, req.body);
+    sendResponse(res, {
+      statusCode: 200, // এখানে statusCode যোগ করা হয়েছে
+      success: true,
+      message: "User updated",
+      data: updatedUser,
     });
   }),
 };
