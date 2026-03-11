@@ -53,5 +53,5 @@ const getMyRentals = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
 exports.rentalController = {
     createRental,
     returnVehicle,
-    getMyRentals // এক্সপোর্ট লিস্টে যোগ করা হলো
+    getMyRentals
 };

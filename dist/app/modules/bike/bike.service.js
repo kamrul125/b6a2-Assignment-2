@@ -23,7 +23,7 @@ const createBikeIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function
             cc: payload.cc,
             model: payload.model,
             brand: payload.brand,
-            year: payload.year, // এটি এখন Optional হিসেবে কাজ করবে
+            year: payload.year,
         },
     });
 });

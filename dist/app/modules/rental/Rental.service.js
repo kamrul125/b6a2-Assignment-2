@@ -75,5 +75,5 @@ const getUserRentalsFromDB = (userId) => __awaiter(void 0, void 0, void 0, funct
 exports.rentalService = {
     createRentalIntoDB,
     returnVehicleInDB,
-    getUserRentalsFromDB // এক্সপোর্ট লিস্টে যোগ করা হলো
+    getUserRentalsFromDB
 };
