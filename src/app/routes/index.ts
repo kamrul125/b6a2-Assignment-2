@@ -3,7 +3,7 @@ import { Router } from 'express';
 // আপনার ফোল্ডারের নাম bike, তাই পাথ হবে ../modules/bike/bike.route
 import { bikeRoutes } from '../modules/bike/bike.route';
 // আপনার ফোল্ডারের নাম Rental (R বড় হাতের), তাই পাথ হবে ../modules/Rental/rental.route
-import { rentalRoutes } from '../modules/Rental/rental.route';
+import { rentalRoutes } from '../modules/rental/rental.route';
 import { authRoutes } from '../modules/auth/auth.route';
 
 const router = Router();
