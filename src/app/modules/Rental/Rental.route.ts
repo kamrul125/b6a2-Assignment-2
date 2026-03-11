@@ -16,4 +16,4 @@ router.put('/return/:id', authMiddleware, rentalController.returnVehicle);
 // GET /api/v1/rentals/my-rentals
 router.get('/my-rentals', authMiddleware, rentalController.getMyRentals);
 
-export const rentalRoutes = router;
+export const rentalRoutes = router ;
