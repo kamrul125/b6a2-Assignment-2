@@ -1,7 +1,16 @@
-import app from "./app";
+import { Server } from 'http';
+import app from './app';
 
-const PORT = 5000;
+const PORT = process.env.PORT || 5000;
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
+async function main() {
+  try {
+    const server: Server = app.listen(PORT, () => {
+      console.log(`🚀 Server is running on port ${PORT}`);
+    });
+  } catch (err) {
+    console.log(err);
+  }
+}
+
+main();
