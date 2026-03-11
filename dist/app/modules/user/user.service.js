@@ -31,11 +31,9 @@ exports.userService = {
         return user;
     }),
     updateUser: (id, data, currentUser) => __awaiter(void 0, void 0, void 0, function* () {
-        // ১. Authorization Check: এডমিন সবাইরে পারে, ইউজার শুধু নিজেকে পারে
         if (currentUser.role !== "ADMIN" && currentUser.id !== id) {
             throw new Error("You are not authorized to update this profile!");
         }
-        // ২. পাসওয়ার্ড আপডেট করলে সেটা হ্যাশ করা
         if (data.password) {
             data.password = yield bcrypt_1.default.hash(data.password, 10);
         }
@@ -47,11 +45,9 @@ exports.userService = {
         return updated;
     }),
     deleteUser: (id, currentUser) => __awaiter(void 0, void 0, void 0, function* () {
-        // ৩. ডিলিট করার পারমিশন চেক (শুধু এডমিন)
         if (currentUser.role !== "ADMIN") {
             throw new Error("Only admin can delete users");
         }
-        // চেক করা যে ইউজার আসলে আছে কি না
         const isExist = yield prisma_1.default.user.findUnique({ where: { id } });
         if (!isExist)
             throw new Error("User not found to delete!");

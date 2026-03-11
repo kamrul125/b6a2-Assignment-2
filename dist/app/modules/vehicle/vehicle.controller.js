@@ -46,7 +46,7 @@ const getSingleVehicle = (0, catchAsync_1.default)((req, res) => __awaiter(void 
         data: result,
     });
 }));
-// ৪. বাইক আপডেট (এটি আপনার এরর দূর করবে)
+// ৪. বাইক আপডেট 
 const updateVehicle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield vehicle_service_1.vehicleService.updateVehicle(Number(req.params.id), req.body);
     (0, sendResponse_1.sendResponse)(res, {
@@ -56,7 +56,7 @@ const updateVehicle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
-// ৫. বাইক ডিলিট (এটিও আপনার এরর দূর করবে)
+// ৫. বাইক ডিলিট 
 const deleteVehicle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     const result = yield vehicle_service_1.vehicleService.deleteVehicle(Number(req.params.id));
     (0, sendResponse_1.sendResponse)(res, {
@@ -89,13 +89,12 @@ const returnRental = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, v
         data: result,
     });
 }));
-// এই অবজেক্টে সব নাম থাকা বাধ্যতামূলক
 exports.vehicleController = {
     createVehicle,
     getAllVehicles,
     getSingleVehicle,
-    updateVehicle, // এখানে অ্যাড করা হলো
-    deleteVehicle, // এখানে অ্যাড করা হলো
+    updateVehicle,
+    deleteVehicle,
     createRental,
     returnRental,
 };

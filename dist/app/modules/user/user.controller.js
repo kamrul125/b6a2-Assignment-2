@@ -20,7 +20,7 @@ exports.userController = {
     getAllUsers: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const users = yield user_service_1.userService.getAllUsers();
         (0, sendResponse_1.sendResponse)(res, {
-            statusCode: 200, // <--- এটি যোগ করা হয়েছে
+            statusCode: 200,
             success: true,
             message: "All users retrieved",
             data: users
@@ -29,7 +29,7 @@ exports.userController = {
     getSingleUser: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const user = yield user_service_1.userService.getSingleUser(Number(req.params.id));
         (0, sendResponse_1.sendResponse)(res, {
-            statusCode: 200, // <--- এটি যোগ করা হয়েছে
+            statusCode: 200,
             success: true,
             message: "User retrieved",
             data: user
@@ -40,7 +40,7 @@ exports.userController = {
         const currentUser = req.user;
         const updatedUser = yield user_service_1.userService.updateUser(Number(req.params.id), req.body, currentUser);
         (0, sendResponse_1.sendResponse)(res, {
-            statusCode: 200, // <--- এটি যোগ করা হয়েছে
+            statusCode: 200,
             success: true,
             message: "User updated",
             data: updatedUser
@@ -51,10 +51,10 @@ exports.userController = {
         const currentUser = req.user;
         yield user_service_1.userService.deleteUser(Number(req.params.id), currentUser);
         (0, sendResponse_1.sendResponse)(res, {
-            statusCode: 200, // <--- এটি যোগ করা হয়েছে
+            statusCode: 200,
             success: true,
             message: "User deleted",
-            data: null // data প্রপার্টি পাঠাতে হবে কারণ ইন্টারফেসে আছে
+            data: null
         });
     })),
 };

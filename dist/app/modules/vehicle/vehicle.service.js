@@ -35,7 +35,6 @@ const deleteVehicle = (id) => __awaiter(void 0, void 0, void 0, function* () {
         where: { id },
     });
 });
-// --- Booking Management Part (Updated from Rental to Booking) ---
 // ১. বুকিং তৈরি করা (ভাড়া দেওয়া)
 const createRental = (userId, bikeId, startTime) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
@@ -44,7 +43,6 @@ const createRental = (userId, bikeId, startTime) => __awaiter(void 0, void 0, vo
             where: { id: bikeId },
             data: { isAvailable: false },
         });
-        // বুকিং রেকর্ড তৈরি (এখন prisma.booking ব্যবহার হবে)
         return yield tx.booking.create({
             data: {
                 userId,
@@ -56,7 +54,6 @@ const createRental = (userId, bikeId, startTime) => __awaiter(void 0, void 0, vo
 });
 // ২. বুকিং রিটার্ন (টাকা ক্যালকুলেশন লজিক)
 const returnRental = (bookingId) => __awaiter(void 0, void 0, void 0, function* () {
-    // প্রিজমা এখন 'booking' মডেল ব্যবহার করবে
     const booking = yield prisma.booking.findUnique({
         where: { id: bookingId },
         include: { bike: true },
@@ -65,7 +62,6 @@ const returnRental = (bookingId) => __awaiter(void 0, void 0, void 0, function* 
         throw new Error("Booking record not found!");
     const returnTime = new Date();
     const startTime = new Date(booking.startTime);
-    // ঘণ্টার পার্থক্য বের করা
     const diffInMs = returnTime.getTime() - startTime.getTime();
     const diffInHours = Math.ceil(diffInMs / (1000 * 60 * 60));
     const totalCost = diffInHours * booking.bike.pricePerHour;

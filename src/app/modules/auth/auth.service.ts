@@ -22,8 +22,7 @@ const login = async (data: any) => {
   // টোকেন পেলোড
   const jwtPayload = { id: user.id, role: user.role };
 
-  // টোকেন তৈরির সময় চাবি এবং এক্সপায়ারি টাইম সেট করা
-  // expiresIn: (config.jwt_access_expires_in as any) ব্যবহারের ফলে টাইপ এররটি চলে যাবে
+  
   const token = jwt.sign(
     jwtPayload,
     config.jwt_access_secret as string,

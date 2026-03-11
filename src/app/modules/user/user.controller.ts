@@ -7,7 +7,7 @@ export const userController = {
   getAllUsers: catchAsync(async (req: Request, res: Response) => {
     const users = await userService.getAllUsers();
     sendResponse(res, { 
-      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      statusCode: 200, 
       success: true, 
       message: "All users retrieved", 
       data: users 
@@ -17,7 +17,7 @@ export const userController = {
   getSingleUser: catchAsync(async (req: Request, res: Response) => {
     const user = await userService.getSingleUser(Number(req.params.id));
     sendResponse(res, { 
-      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      statusCode: 200,
       success: true, 
       message: "User retrieved", 
       data: user 
@@ -29,7 +29,7 @@ export const userController = {
     const currentUser = req.user;
     const updatedUser = await userService.updateUser(Number(req.params.id), req.body, currentUser);
     sendResponse(res, { 
-      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      statusCode: 200, 
       success: true, 
       message: "User updated", 
       data: updatedUser 
@@ -41,10 +41,10 @@ export const userController = {
     const currentUser = req.user;
     await userService.deleteUser(Number(req.params.id), currentUser);
     sendResponse(res, { 
-      statusCode: 200, // <--- এটি যোগ করা হয়েছে
+      statusCode: 200, 
       success: true, 
       message: "User deleted",
-      data: null // data প্রপার্টি পাঠাতে হবে কারণ ইন্টারফেসে আছে
+      data: null 
     });
   }),
 };

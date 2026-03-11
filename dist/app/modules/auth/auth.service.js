@@ -34,8 +34,6 @@ const login = (data) => __awaiter(void 0, void 0, void 0, function* () {
         throw new Error("Invalid password");
     // টোকেন পেলোড
     const jwtPayload = { id: user.id, role: user.role };
-    // টোকেন তৈরির সময় চাবি এবং এক্সপায়ারি টাইম সেট করা
-    // expiresIn: (config.jwt_access_expires_in as any) ব্যবহারের ফলে টাইপ এররটি চলে যাবে
     const token = jsonwebtoken_1.default.sign(jwtPayload, config_1.default.jwt_access_secret, {
         expiresIn: config_1.default.jwt_access_expires_in || '7d'
     });

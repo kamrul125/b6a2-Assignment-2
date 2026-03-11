@@ -38,24 +38,24 @@ export const authController = {
     });
   }),
 
-  // ১. সকল ইউজার দেখার জন্য (আপনার এরর মেসেজ অনুযায়ী এটি দরকার)
+
   getAllUsers: catchAsync(async (req: Request, res: Response) => {
     const users = await authService.getAllUsers();
     sendResponse(res, {
-      statusCode: 200, // এখানে statusCode যোগ করা হয়েছে
+      statusCode: 200, 
       success: true,
       message: "All users retrieved",
       data: users,
     });
   }),
 
-  // ২. প্রোফাইল আপডেট করার জন্য (আপনার এরর মেসেজ অনুযায়ী এটি দরকার)
+  
   updateProfile: catchAsync(async (req: Request, res: Response) => {
     // @ts-ignore
     const userId = req.user.id;
     const updatedUser = await authService.updateProfile(userId, req.body);
     sendResponse(res, {
-      statusCode: 200, // এখানে statusCode যোগ করা হয়েছে
+      statusCode: 200, 
       success: true,
       message: "User updated",
       data: updatedUser,

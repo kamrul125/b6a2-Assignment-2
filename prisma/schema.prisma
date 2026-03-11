@@ -20,28 +20,27 @@ model User {
   phone     String?
   address   String?
   role      Role      @default(USER)
-  // রিলেশন নাম আপডেট করা হয়েছে
   bookings  Booking[] 
   createdAt DateTime  @default(now())
   updatedAt DateTime  @updatedAt
 }
 
 model Bike {
-  id           Int       @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   name         String
   description  String
-  pricePerHour Float    
-  isAvailable  Boolean   @default(true)
-  brand        String
-  model        String
+  pricePerHour Float
+  isAvailable  Boolean  @default(true)
   cc           Int
-  // রিলেশন নাম আপডেট করা হয়েছে
-  bookings  Booking[]
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
+  model        String
+  brand        String
+  // এখানে কি "year" ফিল্ডটি আছে? যদি না থাকে তবে যোগ করুন:
+  year         Int?    
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+  bookings     Booking[]
 }
 
-// Rental এর বদলে এখন Booking
 model Booking {
   id         Int       @id @default(autoincrement())
   userId     Int
@@ -59,6 +58,5 @@ model Booking {
 
   @@index([userId])
   @@index([bikeId])
-  // ডাটাবেজে টেবিলের নাম bookings দেখাবে
   @@map("bookings") 
 }

@@ -17,7 +17,7 @@ async function main() {
         name: "Super Admin",
         email: adminEmail,
         password: hashedAdminPassword,
-        role: Role.ADMIN, // Enum ব্যবহার করা ভালো
+        role: Role.ADMIN, 
         phone: "01700000000",
         address: "Dhaka, Bangladesh",
       },
@@ -27,7 +27,7 @@ async function main() {
     console.log("ℹ️ Admin user already exists");
   }
 
-  // ২. সাধারণ ইউজার তৈরি করা
+ 
   const users = [
     { name: "Alice", email: "alice@example.com", password: "password123" },
     { name: "Bob", email: "bob@example.com", password: "password123" },
@@ -49,8 +49,7 @@ async function main() {
     }
   }
 
-  // ৩. কিছু বাইক (Bikes) তৈরি করার লজিক 🆕
-  // এগুলো না থাকলে আপনি বুকিং এপিআই টেস্ট করতে পারবেন না
+  
   const bikes = [
     {
       name: "Yamaha R15 V4",
@@ -73,7 +72,7 @@ async function main() {
   ];
 
   for (const b of bikes) {
-    // বাইকের নাম দিয়ে চেক করছি অলরেডি আছে কি না
+
     const bikeExists = await prisma.bike.findFirst({ where: { name: b.name } });
     if (!bikeExists) {
       await prisma.bike.create({ data: b });

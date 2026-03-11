@@ -47,23 +47,21 @@ exports.authController = {
             data: user,
         });
     })),
-    // ১. সকল ইউজার দেখার জন্য (আপনার এরর মেসেজ অনুযায়ী এটি দরকার)
     getAllUsers: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         const users = yield auth_service_1.authService.getAllUsers();
         (0, sendResponse_1.sendResponse)(res, {
-            statusCode: 200, // এখানে statusCode যোগ করা হয়েছে
+            statusCode: 200,
             success: true,
             message: "All users retrieved",
             data: users,
         });
     })),
-    // ২. প্রোফাইল আপডেট করার জন্য (আপনার এরর মেসেজ অনুযায়ী এটি দরকার)
     updateProfile: (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
         // @ts-ignore
         const userId = req.user.id;
         const updatedUser = yield auth_service_1.authService.updateProfile(userId, req.body);
         (0, sendResponse_1.sendResponse)(res, {
-            statusCode: 200, // এখানে statusCode যোগ করা হয়েছে
+            statusCode: 200,
             success: true,
             message: "User updated",
             data: updatedUser,

@@ -15,10 +15,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.authMiddleware = void 0;
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const catchAsync_1 = __importDefault(require("../utils/catchAsync"));
-const config_1 = __importDefault(require("../config")); // config ফাইলটি ইমপোর্ট করুন
+const config_1 = __importDefault(require("../config"));
 exports.authMiddleware = (0, catchAsync_1.default)((req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     const authHeader = req.headers.authorization;
-    // ১. টোকেন আছে কি না চেক করা
     if (!authHeader || !authHeader.startsWith('Bearer ')) {
         return res.status(401).json({
             success: false,
@@ -26,11 +25,8 @@ exports.authMiddleware = (0, catchAsync_1.default)((req, res, next) => __awaiter
         });
     }
     const token = authHeader.split(' ')[1];
-    // ২. টোকেন ভেরিফাই করা
     try {
-        // এখানে config.jwt_access_secret ব্যবহার করুন যা আপনার .env এর সাথে মিলবে
         const decoded = jsonwebtoken_1.default.verify(token, config_1.default.jwt_access_secret);
-        // ৩. ডিকোড করা ডাটা রিকোয়েস্টে রাখা
         req.user = decoded;
         next();
     }

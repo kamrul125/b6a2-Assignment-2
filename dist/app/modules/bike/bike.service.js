@@ -1,0 +1,49 @@
+"use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
+Object.defineProperty(exports, "__esModule", { value: true });
+exports.bikeService = void 0;
+const client_1 = require("@prisma/client");
+const prisma = new client_1.PrismaClient();
+const createBikeIntoDB = (payload) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    return yield prisma.bike.create({
+        data: {
+            name: payload.name,
+            description: payload.description,
+            pricePerHour: payload.pricePerHour,
+            isAvailable: (_a = payload.isAvailable) !== null && _a !== void 0 ? _a : true,
+            cc: payload.cc,
+            model: payload.model,
+            brand: payload.brand,
+            year: payload.year, // এটি এখন Optional হিসেবে কাজ করবে
+        },
+    });
+});
+const getAllBikesFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma.bike.findMany();
+});
+const updateBikeInDB = (id, payload) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma.bike.update({
+        where: { id },
+        data: payload,
+    });
+});
+const deleteBikeFromDB = (id) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma.bike.delete({
+        where: { id },
+    });
+});
+exports.bikeService = {
+    createBikeIntoDB,
+    getAllBikesFromDB,
+    updateBikeInDB,
+    deleteBikeFromDB,
+};

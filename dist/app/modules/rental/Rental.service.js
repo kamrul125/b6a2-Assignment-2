@@ -9,20 +9,19 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.bookingService = void 0;
+exports.rentalService = void 0;
 const client_1 = require("@prisma/client");
 const prisma = new client_1.PrismaClient();
-const createBookingIntoDB = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
+// ১. বুকিং তৈরি করা
+const createRentalIntoDB = (payload, userId) => __awaiter(void 0, void 0, void 0, function* () {
     const bike = yield prisma.bike.findUnique({
         where: { id: payload.bikeId },
     });
-    if (!bike) {
+    if (!bike)
         throw new Error('Bike not found!');
-    }
-    if (!bike.isAvailable) {
+    if (!bike.isAvailable)
         throw new Error('This bike is already booked!');
-    }
-    const result = yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         const newBooking = yield tx.booking.create({
             data: {
                 userId: userId,
@@ -36,9 +35,9 @@ const createBookingIntoDB = (payload, userId) => __awaiter(void 0, void 0, void 
         });
         return newBooking;
     }));
-    return result;
 });
-const returnVehicle = (bookingId, returnTime) => __awaiter(void 0, void 0, void 0, function* () {
+// ২. বাইক রিটার্ন করা
+const returnVehicleInDB = (bookingId, returnTime) => __awaiter(void 0, void 0, void 0, function* () {
     const booking = yield prisma.booking.findUnique({
         where: { id: bookingId },
         include: { bike: true }
@@ -50,7 +49,7 @@ const returnVehicle = (bookingId, returnTime) => __awaiter(void 0, void 0, void 
     const diffInMs = endTime.getTime() - startTime.getTime();
     const diffInHours = Math.ceil(diffInMs / (1000 * 60 * 60));
     const totalCost = diffInHours * booking.bike.pricePerHour;
-    const result = yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
+    return yield prisma.$transaction((tx) => __awaiter(void 0, void 0, void 0, function* () {
         const updatedBooking = yield tx.booking.update({
             where: { id: bookingId },
             data: {
@@ -65,19 +64,16 @@ const returnVehicle = (bookingId, returnTime) => __awaiter(void 0, void 0, void 
         });
         return updatedBooking;
     }));
-    return result;
 });
-const getAllBookingsFromDB = () => __awaiter(void 0, void 0, void 0, function* () {
-    // rental -> booking
+// --- নতুন যোগ করা ফাংশন (Requirement অনুযায়ী) ---
+const getUserRentalsFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma.booking.findMany({
-        include: {
-            user: true,
-            bike: true,
-        },
+        where: { userId },
+        include: { bike: true }
     });
 });
-exports.bookingService = {
-    createBookingIntoDB,
-    returnVehicle,
-    getAllBookingsFromDB
+exports.rentalService = {
+    createRentalIntoDB,
+    returnVehicleInDB,
+    getUserRentalsFromDB // এক্সপোর্ট লিস্টে যোগ করা হলো
 };
