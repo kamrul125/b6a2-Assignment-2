@@ -4,7 +4,7 @@ const express_1 = require("express");
 // আপনার ফোল্ডারের নাম bike, তাই পাথ হবে ../modules/bike/bike.route
 const bike_route_1 = require("../modules/bike/bike.route");
 // আপনার ফোল্ডারের নাম Rental (R বড় হাতের), তাই পাথ হবে ../modules/Rental/rental.route
-const rental_route_1 = require("../modules/Rental/rental.route");
+const rental_route_1 = require("../modules/rental/rental.route");
 const auth_route_1 = require("../modules/auth/auth.route");
 const router = (0, express_1.Router)();
 const moduleRoutes = [
