@@ -38,7 +38,6 @@ const returnVehicle = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, 
         data: result,
     });
 }));
-// --- নতুন যোগ করা কন্ট্রোলার (Requirement অনুযায়ী) ---
 const getMyRentals = (0, catchAsync_1.default)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
     // @ts-ignore
     const userId = req.user.id;

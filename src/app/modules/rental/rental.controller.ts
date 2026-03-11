@@ -29,7 +29,7 @@ const returnVehicle = catchAsync(async (req: Request, res: Response) => {
   });
 });
 
-// --- নতুন যোগ করা কন্ট্রোলার (Requirement অনুযায়ী) ---
+
 const getMyRentals = catchAsync(async (req: Request, res: Response) => {
   // @ts-ignore
   const userId = req.user.id;

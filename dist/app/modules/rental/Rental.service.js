@@ -65,7 +65,7 @@ const returnVehicleInDB = (bookingId, returnTime) => __awaiter(void 0, void 0, v
         return updatedBooking;
     }));
 });
-// --- নতুন যোগ করা ফাংশন (Requirement অনুযায়ী) ---
+// --- নতুন যোগ করা ফাংশন  ---
 const getUserRentalsFromDB = (userId) => __awaiter(void 0, void 0, void 0, function* () {
     return yield prisma.booking.findMany({
         where: { userId },

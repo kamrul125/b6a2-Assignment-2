@@ -63,7 +63,7 @@ const returnVehicleInDB = async (bookingId: number, returnTime: string) => {
   });
 };
 
-// --- নতুন যোগ করা ফাংশন (Requirement অনুযায়ী) ---
+// --- নতুন যোগ করা ফাংশন  ---
 const getUserRentalsFromDB = async (userId: number) => {
   return await prisma.booking.findMany({
     where: { userId },

@@ -1,8 +1,5 @@
 import { Router } from 'express';
-
-// আপনার ফোল্ডারের নাম bike, তাই পাথ হবে ../modules/bike/bike.route
 import { bikeRoutes } from '../modules/bike/bike.route';
-// আপনার ফোল্ডারের নাম Rental (R বড় হাতের), তাই পাথ হবে ../modules/Rental/rental.route
 import { rentalRoutes } from '../modules/rental/rental.route';
 import { authRoutes } from '../modules/auth/auth.route';
 
@@ -14,12 +11,12 @@ const moduleRoutes = [
     route: authRoutes,
   },
   {
-    // রেফারেন্স অনুযায়ী ইউআরএল হবে /bikes
+ 
     path: '/bikes',
     route: bikeRoutes,
   },
   {
-    // রেফারেন্স অনুযায়ী ইউআরএল হবে /rentals
+
     path: '/rentals',
     route: rentalRoutes,
   },
