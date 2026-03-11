@@ -1,8 +1,10 @@
 import { Router } from 'express';
-// যদি ফাইল খুঁজে না পায়, তবে পাথগুলো আবার চেক করুন
-import { authRoutes } from '../modules/auth/auth.route'; 
+
+// আপনার ফোল্ডারের নাম bike, তাই পাথ হবে ../modules/bike/bike.route
 import { bikeRoutes } from '../modules/bike/bike.route';
-import { rentalRoutes } from '../modules/rental/rental.route';
+// আপনার ফোল্ডারের নাম Rental (R বড় হাতের), তাই পাথ হবে ../modules/Rental/rental.route
+import { rentalRoutes } from '../modules/Rental/rental.route';
+import { authRoutes } from '../modules/auth/auth.route';
 
 const router = Router();
 
@@ -12,10 +14,12 @@ const moduleRoutes = [
     route: authRoutes,
   },
   {
+    // রেফারেন্স অনুযায়ী ইউআরএল হবে /bikes
     path: '/bikes',
     route: bikeRoutes,
   },
   {
+    // রেফারেন্স অনুযায়ী ইউআরএল হবে /rentals
     path: '/rentals',
     route: rentalRoutes,
   },
